@@ -3,6 +3,7 @@ const $$ = document.querySelectorAll.bind(document);
 const song = $("#song");
 const render = $(".render");
 const btnPlay = $(".play");
+const range = $("#range");
 const appMusic = {
   isPlaying: false,
   songs: [
@@ -137,6 +138,17 @@ const appMusic = {
         _this.isPlaying = true;
         song.play();
       }
+    });
+
+    song.addEventListener("timeupdate", () => {
+      if (song.duration) {
+        const time = Math.floor((song.currentTime / song.duration) * 100);
+        range.value = time;
+      }
+    });
+    range.addEventListener("change", (e) => {
+      const currentTime = (song.duration / 100) * e.target.value;
+      song.currentTime = currentTime;
     });
   },
   start: function () {
