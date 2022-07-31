@@ -112,22 +112,22 @@ const appMusic = {
     });
   },
   loadCurrentSong: function () {
-    let currentName = "Holo";
-    let currentUrl = "./music/holo.mp3";
-    let currentImg =
-      "https://images.unsplash.com/photo-1644982647869-e1337f992828?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60";
-
+    const [current, ...rest] = this.songs;
+    let currentName = current.name;
+    let currentUrl = current.url;
+    let currentImg = current.image;
     $(".music-name").textContent = currentName;
     $(".music-img").src = currentImg;
     song.src = currentUrl;
   },
   playSong: function () {
     const _this = this;
+    const thumbAnimation = $(".music-img");
 
     btnPlay.addEventListener("click", () => {
       const tooglePlay = $(".play-icon");
       tooglePlay.classList.toggle("playing");
-
+      thumbAnimation.classList.toggle("animation");
       const tooglePause = $(".pause-icon");
       tooglePause.classList.toggle("playing");
 

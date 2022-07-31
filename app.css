@@ -58,6 +58,9 @@ body {
   border-radius: 100rem;
   box-shadow: 0 0 0 3px #ffb86c, 0 0 0 6px white, 0 0 0 9px #ff6bcb;
 }
+.music-img.animation {
+  animation: rotation 10s infinite linear;
+}
 .music-name {
   font-size: 18px;
   font-weight: 500;
@@ -167,4 +170,12 @@ body {
   margin-left: 50px;
   font-size: 16px;
   font-weight: 500;
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
