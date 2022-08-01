@@ -74,9 +74,9 @@ const appMusic = {
   ],
   // render data music
   render: function () {
-    const htmls = this.songs.map((song) => {
+    const htmls = this.songs.map((song, index) => {
       return `
-        <div class="list-items">
+        <div class="list-items ${index === this.currenIndex ? "active" : ""}">
             <div class="list-image">
             <img src="${song.image}" alt="" />
             </div>
@@ -194,6 +194,7 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
+        _this.render();
         // } else if (_this.isRepeat) {
         //   _this.repeat();
         //   song.play();
@@ -209,6 +210,7 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
+        _this.render();
       }
     });
     backSong.addEventListener("click", () => {
@@ -220,6 +222,7 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
+        _this.render();
       } else {
         _this.back();
         song.play();
@@ -228,6 +231,7 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
+        _this.render();
       }
     });
     repeatSong.addEventListener("click", function (e) {
@@ -252,6 +256,7 @@ const appMusic = {
           tooglePause.classList.remove("playing");
         } else {
           nextSong.click();
+          _this.render();
         }
       }, 500);
     });
@@ -281,6 +286,10 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
+
+        const checkActive = $(".list-items.active");
+        checkActive.classList.remove("active");
+        items[i].classList.toggle("active");
       });
     }
   },
