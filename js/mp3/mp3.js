@@ -8,6 +8,9 @@ const nextSong = $(".play-forward");
 const backSong = $(".play-back");
 const repeatSong = $(".play-repeat");
 const ramdomSong = $(".play-infinite");
+const thumbAnimation = $(".music-img");
+const tooglePause = $(".pause-icon");
+const tooglePlay = $(".play-icon");
 const appMusic = {
   isPlaying: false,
   isRamdom: false,
@@ -150,9 +153,6 @@ const appMusic = {
   // play music, pause music and resume music, rotate cd
   playSong: function () {
     const _this = this;
-    const thumbAnimation = $(".music-img");
-    const tooglePause = $(".pause-icon");
-    const tooglePlay = $(".play-icon");
 
     const animation = thumbAnimation.animate(
       [{ transform: "rotate(360deg)" }],
@@ -194,19 +194,18 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
-      } else if (_this.isRepeat) {
-        _this.repeat();
-        song.play();
-        _this.isPlaying = true;
-        song.play();
-        animation.play();
-        tooglePlay.classList.add("playing");
-        tooglePause.classList.remove("playing");
+        // } else if (_this.isRepeat) {
+        //   _this.repeat();
+        //   song.play();
+        //   _this.isPlaying = true;
+        //   song.play();
+        //   animation.play();
+        //   tooglePlay.classList.add("playing");
+        //   tooglePause.classList.remove("playing");
       } else {
         _this.next();
         song.play();
         _this.isPlaying = true;
-        song.play();
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
@@ -243,17 +242,55 @@ const appMusic = {
     });
     song.addEventListener("ended", function () {
       setTimeout(function () {
-        nextSong.click();
+        if (_this.isRepeat) {
+          _this.repeat();
+          song.play();
+          _this.isPlaying = true;
+          song.play();
+          animation.play();
+          tooglePlay.classList.add("playing");
+          tooglePause.classList.remove("playing");
+        } else {
+          nextSong.click();
+        }
       }, 500);
     });
   },
+  chooseSongs: function () {
+    const _this = this;
+    const items = $$(".list-items");
+    const itemsImg = $$(".list-image > img");
+    const itemsAudio = $$(".list-audio");
+    const itemsName = $$(".list-name");
 
+    const animation = thumbAnimation.animate(
+      [{ transform: "rotate(360deg)" }],
+      {
+        duration: 10000,
+        iterations: Infinity,
+      }
+    );
+    animation.pause();
+    for (let i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", () => {
+        $(".music-img").src = itemsImg[i].src;
+        $(".music-name").textContent = itemsName[i].innerHTML;
+        song.src = itemsAudio[i].src;
+        song.play();
+        _this.isPlaying = true;
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      });
+    }
+  },
   start: function () {
     this.render();
     this.defineProperties();
     this.handleEvents();
     this.loadCurrentSong();
     this.playSong();
+    this.chooseSongs();
   },
 };
 appMusic.start();
