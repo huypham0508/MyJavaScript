@@ -6,8 +6,12 @@ const btnPlay = $(".play");
 const range = $("#range");
 const nextSong = $(".play-forward");
 const backSong = $(".play-back");
+const repeatSong = $(".play-repeat");
+const ramdomSong = $(".play-infinite");
 const appMusic = {
   isPlaying: false,
+  isRamdom: false,
+  isRepeat: false,
   currenIndex: 0,
   songs: [
     {
@@ -127,6 +131,22 @@ const appMusic = {
     }
     this.loadCurrentSong();
   },
+  ramdom: function () {
+    let newIndex;
+    do {
+      // newIndex = Math.floor(Math.ramdom() * this.songs.length);
+      newIndex = Math.floor(Math.floor(Math.random() * this.songs.length));
+    } while (newIndex === this.currenIndex);
+    this.currenIndex = newIndex;
+    this.loadCurrentSong();
+  },
+  repeat: function () {
+    let newIndex;
+    newIndex = this.currenIndex;
+    this.currenIndex = newIndex;
+    console.log(newIndex, this.currenIndex);
+    this.loadCurrentSong();
+  },
   // play music, pause music and resume music, rotate cd
   playSong: function () {
     const _this = this;
@@ -145,7 +165,6 @@ const appMusic = {
     btnPlay.addEventListener("click", () => {
       tooglePlay.classList.toggle("playing");
       tooglePause.classList.toggle("playing");
-
       if (_this.isPlaying) {
         _this.isPlaying = false;
         song.pause();
@@ -167,21 +186,65 @@ const appMusic = {
       song.currentTime = currentTime;
     });
     nextSong.addEventListener("click", () => {
-      _this.next();
-      song.play();
-      _this.isPlaying = true;
-      song.play();
-      animation.play();
-      tooglePlay.classList.add("playing");
-      tooglePause.classList.remove("playing");
+      if (_this.isRamdom) {
+        _this.ramdom();
+        song.play();
+        _this.isPlaying = true;
+        song.play();
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      } else if (_this.isRepeat) {
+        _this.repeat();
+        song.play();
+        _this.isPlaying = true;
+        song.play();
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      } else {
+        _this.next();
+        song.play();
+        _this.isPlaying = true;
+        song.play();
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      }
     });
     backSong.addEventListener("click", () => {
-      _this.back();
-      _this.isPlaying = true;
-      song.play();
-      animation.play();
-      tooglePlay.classList.add("playing");
-      tooglePause.classList.remove("playing");
+      if (_this.isRamdom) {
+        _this.ramdom();
+        song.play();
+        _this.isPlaying = true;
+        song.play();
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      } else {
+        _this.back();
+        song.play();
+        _this.isPlaying = true;
+        song.play();
+        animation.play();
+        tooglePlay.classList.add("playing");
+        tooglePause.classList.remove("playing");
+      }
+    });
+    repeatSong.addEventListener("click", function (e) {
+      console.log("repeatSong");
+      _this.isRepeat = !_this.isRepeat;
+      repeatSong.classList.toggle("active", _this.isRepeat);
+    });
+    ramdomSong.addEventListener("click", function (e) {
+      console.log("ramdomSong");
+      _this.isRamdom = !_this.isRamdom;
+      ramdomSong.classList.toggle("active", _this.isRamdom);
+    });
+    song.addEventListener("ended", function () {
+      setTimeout(function () {
+        nextSong.click();
+      }, 500);
     });
   },
 

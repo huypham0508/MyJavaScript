@@ -50,7 +50,7 @@ body {
   width: 100px;
   height: 100px;
   margin: 0 auto 25px;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .music-thumb.is-playing {
   animation: spinner 5s infinite linear;
@@ -118,6 +118,14 @@ body {
 .play-back,
 .play-forward {
   cursor: pointer;
+}
+.play-repeat.active {
+  font-weight: bold;
+  color: red;
+}
+.play-infinite.active {
+  font-weight: bold;
+  color: red;
 }
 .range {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
