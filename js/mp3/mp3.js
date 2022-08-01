@@ -195,22 +195,16 @@ const appMusic = {
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
         _this.render();
-        // } else if (_this.isRepeat) {
-        //   _this.repeat();
-        //   song.play();
-        //   _this.isPlaying = true;
-        //   song.play();
-        //   animation.play();
-        //   tooglePlay.classList.add("playing");
-        //   tooglePause.classList.remove("playing");
+        _this.chooseSongs();
       } else {
-        _this.next();
         song.play();
         _this.isPlaying = true;
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
         _this.render();
+        _this.chooseSongs();
+        _this.next();
       }
     });
     backSong.addEventListener("click", () => {
@@ -223,8 +217,8 @@ const appMusic = {
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
         _this.render();
+        _this.chooseSongs();
       } else {
-        _this.back();
         song.play();
         _this.isPlaying = true;
         song.play();
@@ -232,6 +226,8 @@ const appMusic = {
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
         _this.render();
+        _this.chooseSongs();
+        _this.back();
       }
     });
     repeatSong.addEventListener("click", function (e) {
@@ -286,10 +282,10 @@ const appMusic = {
         animation.play();
         tooglePlay.classList.add("playing");
         tooglePause.classList.remove("playing");
-
         const checkActive = $(".list-items.active");
         checkActive.classList.remove("active");
         items[i].classList.toggle("active");
+        console.log("on click");
       });
     }
   },
