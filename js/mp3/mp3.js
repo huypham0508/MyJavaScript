@@ -4,8 +4,11 @@ const song = $("#song");
 const render = $(".render");
 const btnPlay = $(".play");
 const range = $("#range");
+const nextSong = $(".play-forward");
+const backSong = $(".play-back");
 const appMusic = {
   isPlaying: false,
+  currenIndex: 0,
   songs: [
     {
       image:
@@ -61,25 +64,8 @@ const appMusic = {
       name: "Summer",
       url: "./music/mp3_music_summer.mp3",
     },
-    {
-      image:
-        "https://images.unsplash.com/photo-1644982647869-e1337f992828?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-      name: "Holo",
-      url: "./music/holo.mp3",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1659203217345-f9320c023dad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxN3x8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-      name: "Home",
-      url: "./music/home.mp3",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1644982647970-e72b0397e57b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-      name: "Summer",
-      url: "./music/mp3_music_summer.mp3",
-    },
   ],
+  // render data music
   render: function () {
     const htmls = this.songs.map((song) => {
       return `
@@ -93,6 +79,13 @@ const appMusic = {
         `;
     });
     return (render.innerHTML = htmls.join(""));
+  },
+  defineProperties: function () {
+    Object.defineProperty(this, "currentSong", {
+      get: function () {
+        return this.songs[this.currenIndex];
+      },
+    });
   },
   handleEvents: function () {
     const scroll = document.addEventListener("scroll", function () {
@@ -111,35 +104,58 @@ const appMusic = {
       }
     });
   },
+  // get current music
   loadCurrentSong: function () {
-    const [current, ...rest] = this.songs;
-    let currentName = current.name;
-    let currentUrl = current.url;
-    let currentImg = current.image;
+    let currentName = this.currentSong.name;
+    let currentUrl = this.currentSong.url;
+    let currentImg = this.currentSong.image;
     $(".music-name").textContent = currentName;
     $(".music-img").src = currentImg;
     song.src = currentUrl;
   },
+  back: function () {
+    const test = this.currenIndex--;
+    if (this.currenIndex < 0) {
+      this.currenIndex = this.songs.length - 1;
+    }
+    this.loadCurrentSong();
+  },
+  next: function () {
+    this.currenIndex++;
+    if (this.currenIndex >= this.songs.length) {
+      this.currenIndex = 0;
+    }
+    this.loadCurrentSong();
+  },
+  // play music, pause music and resume music, rotate cd
   playSong: function () {
     const _this = this;
     const thumbAnimation = $(".music-img");
+    const tooglePause = $(".pause-icon");
+    const tooglePlay = $(".play-icon");
 
+    const animation = thumbAnimation.animate(
+      [{ transform: "rotate(360deg)" }],
+      {
+        duration: 10000,
+        iterations: Infinity,
+      }
+    );
+    animation.pause();
     btnPlay.addEventListener("click", () => {
-      const tooglePlay = $(".play-icon");
       tooglePlay.classList.toggle("playing");
-      thumbAnimation.classList.toggle("animation");
-      const tooglePause = $(".pause-icon");
       tooglePause.classList.toggle("playing");
 
       if (_this.isPlaying) {
         _this.isPlaying = false;
         song.pause();
+        animation.pause();
       } else {
         _this.isPlaying = true;
         song.play();
+        animation.play();
       }
     });
-
     song.addEventListener("timeupdate", () => {
       if (song.duration) {
         const time = Math.floor((song.currentTime / song.duration) * 100);
@@ -150,9 +166,28 @@ const appMusic = {
       const currentTime = (song.duration / 100) * e.target.value;
       song.currentTime = currentTime;
     });
+    nextSong.addEventListener("click", () => {
+      _this.next();
+      song.play();
+      _this.isPlaying = true;
+      song.play();
+      animation.play();
+      tooglePlay.classList.add("playing");
+      tooglePause.classList.remove("playing");
+    });
+    backSong.addEventListener("click", () => {
+      _this.back();
+      _this.isPlaying = true;
+      song.play();
+      animation.play();
+      tooglePlay.classList.add("playing");
+      tooglePause.classList.remove("playing");
+    });
   },
+
   start: function () {
     this.render();
+    this.defineProperties();
     this.handleEvents();
     this.loadCurrentSong();
     this.playSong();

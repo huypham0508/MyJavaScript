@@ -33,6 +33,10 @@ img {
 body {
   font-family: "Poppins", sans-serif;
   padding: 20px;
+  background-image: url(./image/mp3-background.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .music {
   max-width: 500px;
