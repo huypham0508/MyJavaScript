@@ -166,6 +166,7 @@ body {
   align-items: center;
   margin-bottom: 20px;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 .music-img {
   width: 100px;
@@ -189,6 +190,9 @@ body {
   border: 1px solid #ccc;
   border-radius: 20px;
   padding: 10px;
+}
+.list-items:active {
+  background-color: #ccc;
 }
 .ontop {
   position: fixed;
